@@ -1,1 +1,1 @@
-# did-hack
+# did:hack - decentralized identity hackathon
