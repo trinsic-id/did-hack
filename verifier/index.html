@@ -1,55 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Include the Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet" />
-    <title>Button Example</title>
-  </head>
-  <body>
-    <div class="flex justify-center items-center h-screen">
-      <button id="verifyButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Verify my eligibility
-      </button>
 
-      <div></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet" />
+  <title>Button Example</title>
+</head>
+
+<body>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-6">
+    <!-- We've used 3xl here, but feel free to try other max-widths based on your needs -->
+    <div class="mx-auto max-w-6xl">
+      <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-6 sm:px-6">
+          <h3 class="text-base font-semibold leading-7 text-gray-900">Trinsic Verifier Demo</h3>
+          <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
+            This demo uses OIDC to request a verifiable presentation from the user wallet.
+          </p>
+        </div>
+        <div class="border-t border-gray-100">
+          <dl class="divide-y divide-gray-100">
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900"></dt>
+              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <button id="verifyButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onclick="onVerify()">
+                  Verify my eligibility
+                </button>
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Verifiable Presentation</dt>
+              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <pre class="text-sm"><code id="vpBlock" class="language-plaintext text-sm"></code></pre>
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Verification Results</dt>
+              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <pre class="text-sm"><code id="resultsBlock" class="language-plaintext text-sm"></code></pre>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
     </div>
+  </div>
+  <script src="https://unpkg.com/trinsic-oidc-client-ts@0.1.7-a/dist/browser/oidc-client-ts.js" defer="defer"></script>
+  <script>
+    async function onVerify() {
+      var config = {
+        authority: "https://connect.trinsic.cloud/",
+        client_id: "http://localhost:8080/",
 
-    <script
-      src="https://unpkg.com/trinsic-oidc-client-ts@0.1.7-a/dist/browser/oidc-client-ts.js"
-      defer="defer"
-      id="trinsic-oidc"
-    ></script>
-    <script>
-      const onVerifyClick = async function () {
-        var config = {
-          authority: "https://connect.trinsic.cloud/",
-          client_id: "urn:trinsic:wallets:zACHU5sZ9RrmUZZj9mN88Su",
+        popupWindowFeatures: "menubar=yes,location=yes,toolbar=yes,width=1200,height=800,left=100,top=100;resizable=yes",
+        response_type: "code",
+        scope: "openid",
 
-          popupWindowFeatures:
-            "menubar=yes,location=yes,toolbar=yes,width=1200,height=800,left=100,top=100;resizable=yes",
-          response_type: "code",
-          scope: "openid",
-
-          // trinsic ecosystems
-          extraQueryParams: {
-            "trinsic:ecosystem": "did-hack",
-            "trinsic:schema": ["https://schema.trinsic.cloud/did-hack/example-credential"],
-            "trinsic:mode": "popup",
-          },
-        };
-
-        var mgr = new oidc.UserManager(config);
-
-        var result = await mgr.signinPopup();
-
-        console.log(result.profile._vp_token);
+        // trinsic ecosystems
+        extraQueryParams: {
+          "trinsic:ecosystem": "did-hack",
+          "trinsic:schema": ["https://schema.trinsic.cloud/did-hack/attendance-credential"],
+          "trinsic:mode": "popup",
+        },
       };
 
-      window.addEventListener("load", function () {
-        document.getElementById("verifyButton").addEventListener("click", onVerifyClick);
-      });
-    </script>
-  </body>
+      var mgr = new oidc.UserManager(config);
+
+      var result = await mgr.signinPopup();
+
+      document.getElementById("vpBlock").innerText = JSON.stringify(result.profile._vp_token, null, 2);
+      document.getElementById("resultsBlock").innerText = JSON.stringify(result.profile.verification_result, undefined, 2);
+    }
+  </script>
+</body>
+
 </html>
