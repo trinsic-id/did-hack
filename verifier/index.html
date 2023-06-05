@@ -14,32 +14,33 @@
     <div class="mx-auto max-w-6xl">
       <div class="overflow-hidden bg-white shadow sm:rounded-lg">
         <div class="px-4 py-6 sm:px-6">
-          <h3 class="text-base font-semibold leading-7 text-gray-900">Trinsic Verifier Demo</h3>
-          <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-            This demo uses OIDC to request a verifiable presentation from the user wallet.
+          <h3 class="text-base font-semibold leading-7 text-gray-900">Verifier Demo</h3>
+          <p class="mt-1 max-w-4xl text-sm leading-6 text-gray-500">
+            This demo uses OIDC to request a verifiable presentation from the user wallet that satisifies a given
+            schema.
           </p>
         </div>
         <div class="border-t border-gray-100">
           <dl class="divide-y divide-gray-100">
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-900"></dt>
-              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              <dt class="text-sm font-medium text-gray-900">
                 <button id="verifyButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onclick="onVerify()">
-                  Verify my eligibility
+                  Verify my attendance
                 </button>
-              </dd>
+              </dt>
+              <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"></dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Verifiable Presentation</dt>
               <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                <pre class="text-sm"><code id="vpBlock" class="language-plaintext text-sm"></code></pre>
+                <pre class="text-sm"><code id="vpBlock" class="language-plaintext text-sm">-</code></pre>
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Verification Results</dt>
               <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                <pre class="text-sm"><code id="resultsBlock" class="language-plaintext text-sm"></code></pre>
+                <pre class="text-sm"><code id="resultsBlock" class="language-plaintext text-sm">-</code></pre>
               </dd>
             </div>
           </dl>
@@ -54,7 +55,8 @@
         authority: "https://connect.trinsic.cloud/",
         client_id: "http://localhost:8080/",
 
-        popupWindowFeatures: "menubar=yes,location=yes,toolbar=yes,width=1200,height=800,left=100,top=100;resizable=yes",
+        popupWindowFeatures:
+          "menubar=yes,location=yes,toolbar=yes,width=1200,height=800,left=100,top=100;resizable=yes",
         response_type: "code",
         scope: "openid",
 
@@ -71,7 +73,11 @@
       var result = await mgr.signinPopup();
 
       document.getElementById("vpBlock").innerText = JSON.stringify(result.profile._vp_token, null, 2);
-      document.getElementById("resultsBlock").innerText = JSON.stringify(result.profile.verification_result, undefined, 2);
+      document.getElementById("resultsBlock").innerText = JSON.stringify(
+        result.profile.verification_result,
+        undefined,
+        2
+      );
     }
   </script>
 </body>

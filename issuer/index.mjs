@@ -2,22 +2,22 @@ import { TrinsicService } from "@trinsic/trinsic";
 
 const trinsic = new TrinsicService({ authToken: "" });
 
-const issueRequest = {
-    templateId: "https://schema.trinsic.cloud/did-hack/attendance-credential",
-    valuesJson: JSON.stringify({
-        "name": "John Doe",
-        "email": "john.doe@example.com",
-        "organization": "ABC Corp",
-        "experience": "Intermediate",
-        "specialization": "Web Development",
-        "sessionName": "Intro to Decentralized Identity",
-        "sessionDateTime": "2023-06-10T09:30:00Z",
-        "sessionLocation": "Conference Room A"
-    })
-};
-const issueResponse = await trinsic.credential().issueFromTemplate(issueRequest);
+// const issueRequest = {
+//     templateId: "https://schema.trinsic.cloud/did-hack/attendance-credential",
+//     valuesJson: JSON.stringify({
+//         "name": "John Doe",
+//         "email": "john.doe@example.com",
+//         "organization": "ABC Corp",
+//         "experience": "Intermediate",
+//         "specialization": "Web Development",
+//         "sessionName": "Intro to Decentralized Identity",
+//         "sessionDateTime": "2023-06-10T09:30:00Z",
+//         "sessionLocation": "Conference Room A"
+//     })
+// };
+// const issueResponse = await trinsic.credential().issueFromTemplate(issueRequest);
 
-console.log(JSON.parse(issueResponse.documentJson));
+// console.log(JSON.parse(issueResponse.documentJson), null, 2);
 
 // const sendRequest = {
 //     email: "tomislav@trinsic.id",
